@@ -1,5 +1,6 @@
 package com.ecore.roles.web;
 
+import com.ecore.roles.model.Role;
 import com.ecore.roles.web.dto.RoleDto;
 import org.springframework.http.ResponseEntity;
 
@@ -16,4 +17,7 @@ public interface RolesApi {
     ResponseEntity<RoleDto> getRole(
             UUID roleId);
 
+    ResponseEntity<List<Role>> getRoleByFilters(
+            UUID teamMemberId,
+            UUID teamId);
 }

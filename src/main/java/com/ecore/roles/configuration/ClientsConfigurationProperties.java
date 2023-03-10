@@ -1,14 +1,12 @@
 package com.ecore.roles.configuration;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 @Component
 @ConfigurationProperties(prefix = "clients")
 public class ClientsConfigurationProperties {

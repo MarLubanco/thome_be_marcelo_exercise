@@ -3,6 +3,8 @@ package com.ecore.roles.web.rest;
 import com.ecore.roles.service.TeamsService;
 import com.ecore.roles.web.TeamsApi;
 import com.ecore.roles.web.dto.TeamDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +21,7 @@ import static com.ecore.roles.web.dto.TeamDto.fromModel;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/v1/teams")
+@Tag(name = "Team", description = "Manager Team")
 public class TeamsRestController implements TeamsApi {
 
     private final TeamsService teamsService;
@@ -26,6 +29,7 @@ public class TeamsRestController implements TeamsApi {
     @Override
     @PostMapping(
             produces = {"application/json"})
+    @Operation(summary = "Get all teams")
     public ResponseEntity<List<TeamDto>> getTeams() {
         return ResponseEntity
                 .status(200)
@@ -38,6 +42,7 @@ public class TeamsRestController implements TeamsApi {
     @PostMapping(
             path = "/{teamId}",
             produces = {"application/json"})
+    @Operation(summary = "Get a team by team ID")
     public ResponseEntity<TeamDto> getTeam(
             @PathVariable UUID teamId) {
         return ResponseEntity
