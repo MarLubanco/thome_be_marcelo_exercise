@@ -8,9 +8,9 @@ import com.ecore.roles.model.Role;
 import com.ecore.roles.repository.MembershipRepository;
 import com.ecore.roles.repository.RoleRepository;
 import com.ecore.roles.service.MembershipsService;
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,32 +20,31 @@ import static java.util.Optional.ofNullable;
 
 @Log4j2
 @Service
+@AllArgsConstructor
 public class MembershipsServiceImpl implements MembershipsService {
 
     private final MembershipRepository membershipRepository;
     private final RoleRepository roleRepository;
 
-    @Autowired
-    public MembershipsServiceImpl(
-            MembershipRepository membershipRepository,
-            RoleRepository roleRepository) {
-        this.membershipRepository = membershipRepository;
-        this.roleRepository = roleRepository;
-    }
-
     @Override
-    public Membership assignRoleToMembership(@NonNull Membership m) {
+    public Membership assignRoleToMembership(@NonNull Membership memberShip) {
 
-        UUID roleId = ofNullable(m.getRole()).map(Role::getId)
+        UUID roleId = ofNullable(memberShip.getRole()).map(Role::getId)
                 .orElseThrow(() -> new InvalidArgumentException(Role.class));
-
-        if (membershipRepository.findByUserIdAndTeamId(m.getUserId(), m.getTeamId())
+        log.info(
+                "[MEMBERSHIP=SERVICE - ASSIGN ROLE TO MEMBERSHIP] - Start assign role to membership id: {}  role id: {}",
+                memberShip.getUserId(), roleId.toString());
+        if (membershipRepository.findByUserIdAndTeamId(memberShip.getUserId(), memberShip.getTeamId())
                 .isPresent()) {
+            log.error(
+                    "[MEMBERSHIP=SERVICE - ASSIGN ROLE TO MEMBERSHIP] - Error role binding to existing team");
             throw new ResourceExistsException(Membership.class);
         }
 
         roleRepository.findById(roleId).orElseThrow(() -> new ResourceNotFoundException(Role.class, roleId));
-        return membershipRepository.save(m);
+
+        log.info("[MEMBERSHIP=SERVICE - ASSIGN ROLE TO MEMBERSHIP] - Save membership success");
+        return membershipRepository.save(memberShip);
     }
 
     @Override
