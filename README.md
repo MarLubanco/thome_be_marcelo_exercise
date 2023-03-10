@@ -57,3 +57,7 @@ To apply the fixes for code style issues
 ```shell
 mvn spotless:apply
 ```
+
+```shell
+Swagger: http://localhost:8080/swagger-ui/index.html
+```
